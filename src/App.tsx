@@ -1,8 +1,23 @@
+import Header from "components/Header";
+import Menu from "components/Menu";
+import NoteList from "components/NoteList";
+import Write from "components/Write";
+import { useState } from "react";
+
 function App() {
+  const [isMenu, setIsMenu] = useState(true);
+
+  const menuHandler = () => {
+    setIsMenu((prev) => !prev);
+  };
   return (
-    <div className="w-full h-full flex">
-      <div className="w-full text-center">Screen 1</div>
-      <div className="w-full text-center">Screen 2</div>
+    <div id="App" className="w-full h-full min-w-[1400px] max-w-[1920px]">
+      <Header menuHandler={menuHandler} />
+      <main className="w-full h-main flex divide-x">
+        <Menu isMenu={isMenu} />
+        <NoteList />
+        <Write />
+      </main>
     </div>
   );
 }

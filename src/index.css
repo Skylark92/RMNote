@@ -8,4 +8,19 @@
   #root {
     @apply w-full h-full;
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  time {
+    @apply text-ellipsis overflow-hidden;
+  }
+}
+
+:root {
+  --header-height: 42px;
 }
