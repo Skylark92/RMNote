@@ -1,10 +1,10 @@
-import { MouseEventHandler } from "react";
+import { MouseEvent } from "react";
 
 export default function Modal({
   toggler,
   children,
 }: {
-  toggler: MouseEventHandler;
+  toggler: (event?: MouseEvent) => void;
   children: React.ReactNode;
 }) {
   return (

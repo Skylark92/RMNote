@@ -1,11 +1,13 @@
-import { MouseEventHandler, useState } from "react";
+import { MouseEvent, useState } from "react";
 
 export default function useToggle(initialState: boolean) {
   const [isOn, setIsOn] = useState(initialState);
 
-  const toggle: MouseEventHandler = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const toggle = (event?: MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     setIsOn((prev) => !prev);
   };
 

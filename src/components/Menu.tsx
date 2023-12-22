@@ -14,9 +14,7 @@ export default function Menu({ isMenu }: { isMenu: boolean }) {
       }
     >
       <MenuItem name="All Notes"></MenuItem>
-      <NotebookList>
-        <ListItem name="asdf" />
-      </NotebookList>
+      <NotebookList />
       <MenuItem name="TEMPLATES"></MenuItem>
       <MenuItem name="TRASH"></MenuItem>
     </section>
