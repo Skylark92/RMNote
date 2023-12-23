@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { appContext } from "context/appContext";
+import { useContext, useState } from "react";
 
-export default function ListItem() {
-  const [isSelected, setIsSelected] = useState(false);
+export default function ListItem({
+  content,
+  edittedAt,
+  index,
+}: { index: number } & Note) {
+  const currentNote = useContext(appContext)?.currentNote;
   const [isPinned, setIsPinned] = useState(false);
 
+  const isSelected = currentNote?.index === index;
   return (
     <li
-      className={`p-6 w-full overflow-hidden ${
+      className={`p-6 w-full overflow-hidden cursor-pointer ${
         isSelected ? "bg-blue-100" : ""
       }`}
     >
@@ -16,8 +22,10 @@ export default function ListItem() {
         )}
         제목
       </h3>
-      <p>내용</p>
-      <time className="text-xs text-gray-400">시간</time>
+      <p>{content}</p>
+      <time className="text-xs text-gray-400">
+        {edittedAt.toLocaleString()}
+      </time>
     </li>
   );
 }

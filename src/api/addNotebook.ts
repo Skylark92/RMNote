@@ -1,11 +1,16 @@
-import { getDB, storage } from "./db";
+import Res from "./Res";
+import { getDB, setDB } from "./db";
 
 export default async function addNotebook(name: string) {
+  const response = new Res<NoteDB>();
+
   try {
-    const db = getDB();
     if (name === "") {
       throw new Error("한 글자 이상 입력해야 합니다.");
     }
+
+    const db = getDB();
+
     if (Object.keys(db).includes(name)) {
       throw new Error(`The name "${name}" is already taken.`);
     } else {
@@ -13,13 +18,16 @@ export default async function addNotebook(name: string) {
         ...db,
         [name]: [],
       };
-      localStorage.setItem(storage, JSON.stringify(newData));
-      return newData;
+      setDB(newData);
+      response.setData(newData);
+      response.setOk();
     }
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
-      return error;
+      response.setError(error);
     }
+  } finally {
+    return response;
   }
 }

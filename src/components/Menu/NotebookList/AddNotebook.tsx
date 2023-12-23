@@ -2,7 +2,7 @@ import Modal from "components/Modal";
 import useApi from "hooks/useApi";
 import addNotebook from "api/addNotebook";
 import { dispatchContext } from "context/appContext";
-import { MouseEvent, useContext, useRef } from "react";
+import { MouseEvent, useContext, useEffect, useRef } from "react";
 
 export default function AddNotebook({
   toggler,
@@ -13,6 +13,12 @@ export default function AddNotebook({
   const { isPending, error, run } = useApi(addNotebook);
   const update = useContext(dispatchContext);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   const add = async () => {
     if (inputRef.current) {
       const res = await run(inputRef.current.value);
@@ -21,7 +27,9 @@ export default function AddNotebook({
         alert(res.message);
       } else {
         if (update) {
-          update({ type: "UPDATE_LIST", payload: res });
+          if (res.payload) {
+            update({ type: "UPDATE_LIST", payload: res.payload });
+          }
         } else {
           alert("NOTEBOOK 정보를 업데이트 하지 못했습니다.");
         }
@@ -32,7 +40,7 @@ export default function AddNotebook({
 
   return (
     <Modal toggler={toggler}>
-      <form>
+      <form onSubmit={(event) => event.preventDefault()}>
         <h2 className="font-bold text-lg text-center mb-2 mx-auto">
           Create New Notebook
         </h2>

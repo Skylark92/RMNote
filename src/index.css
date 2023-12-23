@@ -21,6 +21,14 @@
   }
 }
 
+@layer utilities {
+  @variants responsive {
+    .scroll-hidden::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 :root {
   --header-height: 42px;
 }

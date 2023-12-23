@@ -1,4 +1,3 @@
-import ListItem from "./Menu/ListItem";
 import MenuItem from "./Menu/MenuItem";
 import NotebookList from "./Menu/NotebookList";
 
@@ -9,7 +8,7 @@ export default function Menu({ isMenu }: { isMenu: boolean }) {
   return (
     <section
       className={
-        "py-4 gap-2 flex flex-col transition-all duration-300 overflow-hidden" +
+        "py-4 gap-2 flex flex-col transition-all duration-300 overflow-auto" +
         (isMenu ? spread : fold)
       }
     >

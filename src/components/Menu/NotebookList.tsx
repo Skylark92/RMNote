@@ -1,25 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import ButtonIcon from "components/ButtonIcon";
 import useToggle from "hooks/useToggle";
 import AddNotebook from "./NotebookList/AddNotebook";
 import ListItem from "./ListItem";
-import { appContext } from "context/appContext";
+import useList from "hooks/useList";
 
 export default function NotebookList() {
-  const [list, setList] = useState<[keyof NoteDB, Note[]][]>([]);
-  const notebookList = useContext(appContext)?.notebookList;
+  const list = useList();
   const [isMore, setIsMore] = useState(false);
   const { isOn, toggle } = useToggle(false);
   const clickHandler = () => {
     setIsMore((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (notebookList) {
-      const l = Object.entries(notebookList);
-      setList(l);
-    }
-  }, [notebookList]);
 
   return (
     <article>

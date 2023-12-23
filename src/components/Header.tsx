@@ -1,5 +1,6 @@
 import { MouseEventHandler } from "react";
 import ButtonIcon from "./ButtonIcon";
+import NewNote from "./Header/NewNote";
 
 export default function Header({ toggler }: { toggler: MouseEventHandler }) {
   return (
@@ -18,9 +19,7 @@ export default function Header({ toggler }: { toggler: MouseEventHandler }) {
         </div>
       </div>
       <div className="flex gap-4">
-        <button className="text-sm bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-3 rounded">
-          New Note
-        </button>
+        <NewNote />
         <ButtonIcon icon="content_copy" />
         <ButtonIcon icon="settings" />
       </div>

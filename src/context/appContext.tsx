@@ -15,9 +15,12 @@ const reducer = (state: AppState, action: ReducerAction): AppState => {
     case "UPDATE_LIST":
       return { ...state, notebookList: { ...action.payload } };
     case "CHANGE_NOTEBOOK":
-      return { ...state, currentNotebook: { ...action.payload } };
+      return {
+        ...state,
+        currentNotebook: action.payload && { ...action.payload },
+      };
     case "CHANGE_NOTE":
-      return { ...state, currentNote: { ...action.payload } };
+      return { ...state, currentNote: action.payload && { ...action.payload } };
     default:
       return { ...state };
   }

@@ -5,23 +5,14 @@ export default function useApi<T>(callback: (...args: any[]) => Promise<T>) {
   const [error, setError] = useState<string | null>(null);
 
   const run = useCallback(
-    async (...args: any[]): Promise<T | undefined | Error> => {
-      try {
-        setIsPending(true);
-        setError(null);
+    async (...args: any[]): Promise<T> => {
+      setIsPending(true);
+      setError(null);
 
-        const res = await callback(...args);
+      const res = await callback(...args);
 
-        return res;
-      } catch (error) {
-        if (error instanceof Error) {
-          console.log(error.message);
-          setError(error.message);
-          return error;
-        }
-      } finally {
-        setIsPending(false);
-      }
+      setIsPending(false);
+      return res;
     },
     [callback]
   );
