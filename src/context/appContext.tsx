@@ -17,10 +17,11 @@ const reducer = (state: AppState, action: ReducerAction): AppState => {
     case "CHANGE_NOTEBOOK":
       return {
         ...state,
-        currentNotebook: action.payload && { ...action.payload },
+        notebookList: getDB(),
+        currentNotebook: action.payload,
       };
     case "CHANGE_NOTE":
-      return { ...state, currentNote: action.payload && { ...action.payload } };
+      return { ...state, notebookList: getDB(), currentNote: action.payload };
     default:
       return { ...state };
   }

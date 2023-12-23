@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from "react";
+import React, { useState } from "react";
 import ButtonIcon from "components/ButtonIcon";
 
 export default function MenuItem({
@@ -12,7 +12,7 @@ export default function MenuItem({
   const [isMore, setIsMore] = useState(false);
   const isList = React.Children.toArray(children).length > 0;
 
-  const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+  const clickHandler = () => {
     setIsMore((prev) => !prev);
   };
 

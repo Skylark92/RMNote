@@ -5,7 +5,7 @@ export default function useApi<T>(callback: (...args: any[]) => Promise<T>) {
   const [error, setError] = useState<string | null>(null);
 
   const run = useCallback(
-    async (...args: any[]): Promise<T> => {
+    async (...args: Parameters<typeof callback>): Promise<T> => {
       setIsPending(true);
       setError(null);
 

@@ -2,7 +2,7 @@ import Res from "./Res";
 import { getDB } from "./db";
 
 export default async function getAllNotebook() {
-  const response = new Res<[keyof NoteDB, Note[]][]>();
+  const response = new Res<NotebookList>();
 
   try {
     const db = getDB();

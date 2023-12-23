@@ -1,4 +1,3 @@
-import MenuItem from "./Menu/MenuItem";
 import NotebookList from "./Menu/NotebookList";
 
 export default function Menu({ isMenu }: { isMenu: boolean }) {
@@ -12,10 +11,7 @@ export default function Menu({ isMenu }: { isMenu: boolean }) {
         (isMenu ? spread : fold)
       }
     >
-      <MenuItem name="All Notes"></MenuItem>
       <NotebookList />
-      <MenuItem name="TEMPLATES"></MenuItem>
-      <MenuItem name="TRASH"></MenuItem>
     </section>
   );
 }

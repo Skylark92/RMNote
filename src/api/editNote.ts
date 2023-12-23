@@ -1,29 +1,31 @@
+import Res from "./Res";
 import { getDB, storage } from "./db";
 
-export default async function editNote({
-  notebook,
-  index,
-  note,
-}: {
-  notebook: keyof NoteDB;
-  index: number;
-  note: Note;
-}) {
+export default async function editNote(
+  notebook: keyof NoteDB,
+  index: number,
+  content: string
+) {
+  const response = new Res<CurrentNote>();
+
   try {
     const db = getDB();
-    const write = { ...note };
+    const write = { content, edittedAt: new Date().toString() };
     const target = db[notebook];
     target[index] = write;
     localStorage.setItem(storage, JSON.stringify(db));
 
-    return {
+    response.setData({
       index: index,
-      note: note,
-    };
+      note: write,
+    });
+    response.setOk();
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
-      return error;
+      response.setError(error);
     }
+  } finally {
+    return response;
   }
 }

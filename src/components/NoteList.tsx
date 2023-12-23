@@ -21,7 +21,7 @@ export default function NoteList() {
       {currentNotebook && (
         <ol className="divide-y">
           {currentNotebook.notebook.map((note, i) => {
-            return <ListItem {...note} index={i} />;
+            return <ListItem {...note} index={i} key={i} />;
           })}
         </ol>
       )}

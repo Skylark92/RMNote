@@ -6,35 +6,38 @@ import { appContext, dispatchContext } from "context/appContext";
 
 export default function ListItem({
   name,
-  count,
+  notebook,
 }: {
   name: keyof NoteDB;
-  count: number;
+  notebook: Notebook;
 }) {
   const { isPending, run } = useApi(deleteNotebook);
-  const app = useContext(appContext);
+  const notebookList = useContext(appContext)?.notebookList;
+  const currentNotebook = useContext(appContext)?.currentNotebook;
   const update = useContext(dispatchContext);
 
   if (!name) return null;
 
+  const isSelected = currentNotebook?.name === name;
+
   const selectThis = async () => {
-    if (update) {
-      update({
-        type: "CHANGE_NOTEBOOK",
-        payload: {
-          name: name,
-          notebook: app?.notebookList ? app.notebookList[name] : [],
-        },
-      });
-    } else {
-      alert(
-        "문제가 생겨서 해당 노트북을 확인할 수 없습니다. 다시 시도해주세요."
-      );
-    }
+    if (!(update && notebookList)) return;
+    update({
+      type: "CHANGE_NOTEBOOK",
+      payload: {
+        name: name,
+        notebook: notebookList[name],
+      },
+    });
+    update({
+      type: "CHANGE_NOTE",
+      payload: null,
+    });
   };
 
   const deleteThis = async (event: MouseEvent) => {
     event.stopPropagation();
+    if (!(update && currentNotebook)) return;
 
     const isAllowed = window.confirm("정말로 삭제하시겠습니까?");
 
@@ -44,15 +47,11 @@ export default function ListItem({
       if (res instanceof Error) {
         alert(res.message);
       } else {
-        if (update) {
-          if (app?.currentNotebook?.name === name) {
-            update({ type: "CHANGE_NOTEBOOK", payload: null });
-          }
-          if (res.payload) {
-            update({ type: "UPDATE_LIST", payload: res.payload });
-          }
-        } else {
-          alert("NOTEBOOK 정보를 업데이트 하지 못했습니다.");
+        if (currentNotebook.name === name) {
+          update({ type: "CHANGE_NOTEBOOK", payload: null });
+        }
+        if (res.payload) {
+          update({ type: "UPDATE_LIST", payload: res.payload });
         }
       }
     } else return;
@@ -62,13 +61,13 @@ export default function ListItem({
     <li
       className={
         "group w-full py-2 px-6 flex items-center gap-2 hover:bg-zinc-100 cursor-pointer h-12" +
-        (app?.currentNotebook?.name === name ? " bg-zinc-100" : "")
+        (isSelected ? " bg-zinc-100" : "")
       }
       onClick={selectThis}
     >
       <div className="inline-block w-6 h-8 bg-red-300 min-w-[1.5rem] rounded"></div>
       <h3 className="shrink whitespace-nowrap">{name}</h3>
-      <small className="text-xs text-gray-400">{count}</small>
+      <small className="text-xs text-gray-400">{notebook.length}</small>
       <ButtonIcon
         disabled={isPending}
         icon="delete"

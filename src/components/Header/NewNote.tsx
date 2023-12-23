@@ -9,10 +9,7 @@ export default function NewNote() {
   const { isPending, run } = useApi(addNote);
 
   const writeNew = async () => {
-    if (!app) {
-      alert("앱이 준비 되지 않았습니다.");
-      return;
-    }
+    if (!(app && update)) return;
 
     if (!app.currentNotebook) {
       alert("먼저 메모를 저장할 Notebook을 선택해주세요.");
@@ -22,22 +19,27 @@ export default function NewNote() {
       const notes = app.currentNotebook.notebook;
 
       const res = await run(name);
-      if (res.ok) {
-        if (res.payload) {
-          notes.unshift(res.payload);
-          if (update) {
-            update({
-              type: "CHANGE_NOTEBOOK",
-              payload: { name: name, notebook: [...notes] },
-            });
+      if (res.ok && res.payload) {
+        notes.unshift(res.payload);
+        update({
+          type: "CHANGE_NOTEBOOK",
+          payload: { name: name, notebook: [...notes] },
+        });
+        update({
+          type: "CHANGE_NOTE",
+          payload: { index: 0, note: res.payload },
+        });
+      } else {
+        if (res.error?.message === "이미 작성 중입니다.") {
+          if (res.payload) {
             update({
               type: "CHANGE_NOTE",
               payload: { index: 0, note: res.payload },
             });
           }
+        } else {
+          alert("새로운 Note를 생성하지 못했습니다. 다시 시도해주세요.");
         }
-      } else {
-        alert("새로운 Note를 생성하지 못했습니다. 다시 시도해주세요.");
       }
     }
   };

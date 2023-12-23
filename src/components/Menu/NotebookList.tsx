@@ -1,24 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { appContext } from "context/appContext";
 import ButtonIcon from "components/ButtonIcon";
 import useToggle from "hooks/useToggle";
 import AddNotebook from "./NotebookList/AddNotebook";
 import ListItem from "./ListItem";
-import useList from "hooks/useList";
 
 export default function NotebookList() {
-  const list = useList();
+  const db = useContext(appContext)?.notebookList || {};
   const [isMore, setIsMore] = useState(false);
   const { isOn, toggle } = useToggle(false);
+
+  const list = Object.entries(db);
+
   const clickHandler = () => {
     setIsMore((prev) => !prev);
   };
 
   return (
     <article>
-      <h2 className="flex items-center p-1 pl-0 cursor-pointer">
+      <h2
+        className="flex items-center p-1 pl-0 cursor-pointer"
+        onClick={clickHandler}
+      >
         <ButtonIcon
           icon={isMore ? "expand_more" : "chevron_right"}
-          onClick={clickHandler}
           className="text-gray-500 hover:text-gray-700"
         />
         <span className="font-bold text-blue-600 grow text-ellipsis overflow-hidden">
@@ -32,8 +37,8 @@ export default function NotebookList() {
             return (
               <ListItem
                 name={notebook[0]}
-                count={notebook[1].length}
-                key={i + "_" + notebook}
+                notebook={notebook[1]}
+                key={i + "_" + notebook[0]}
               />
             );
           })}
