@@ -20,21 +20,20 @@ export default function AddNotebook({
   }, []);
 
   const add = async () => {
+    if (!update) return;
     if (inputRef.current) {
       const res = await run(inputRef.current.value);
 
-      if (res instanceof Error) {
-        alert(res.message);
+      if (res.ok && res.payload) {
+        update({ type: "UPDATE_LIST", payload: res.payload });
       } else {
-        if (update) {
-          if (res.payload) {
-            update({ type: "UPDATE_LIST", payload: res.payload });
-          }
-        } else {
-          alert("NOTEBOOK 정보를 업데이트 하지 못했습니다.");
+        if (res.error) {
+          alert(
+            res.error.message || "NOTEBOOK 정보를 업데이트 하지 못했습니다."
+          );
         }
-        toggler();
       }
+      toggler();
     }
   };
 

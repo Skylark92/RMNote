@@ -44,14 +44,14 @@ export default function ListItem({
     if (isAllowed) {
       const res = await run(name);
 
-      if (res instanceof Error) {
-        alert(res.message);
-      } else {
+      if (res.ok && res.payload) {
         if (currentNotebook.name === name) {
           update({ type: "CHANGE_NOTEBOOK", payload: null });
         }
-        if (res.payload) {
-          update({ type: "UPDATE_LIST", payload: res.payload });
+        update({ type: "UPDATE_LIST", payload: res.payload });
+      } else {
+        if (res.error) {
+          alert(res.error.message || "NOTEBOOK을 삭제하지 못했습니다.");
         }
       }
     } else return;

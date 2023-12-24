@@ -38,7 +38,10 @@ export default function NewNote() {
             });
           }
         } else {
-          alert("새로운 Note를 생성하지 못했습니다. 다시 시도해주세요.");
+          alert(
+            res.error?.message ||
+              "새로운 Note를 생성하지 못했습니다. 다시 시도해주세요."
+          );
         }
       }
     }
