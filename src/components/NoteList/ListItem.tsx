@@ -1,5 +1,7 @@
+import ContextMenu from "components/ContextMenu";
 import { appContext, dispatchContext } from "context/appContext";
-import { useContext } from "react";
+import useToggle from "hooks/useToggle";
+import { PointerEvent, useContext, useRef } from "react";
 
 export default function ListItem({
   content,
@@ -8,6 +10,8 @@ export default function ListItem({
 }: { index: number } & Note) {
   const currentNote = useContext(appContext)?.currentNote;
   const update = useContext(dispatchContext);
+  const { isOn, toggle } = useToggle(false);
+  const pos = useRef({ x: 0, y: 0 });
 
   const selectThis = () => {
     if (!update) return;
@@ -21,22 +25,41 @@ export default function ListItem({
     });
   };
 
+  const contextHandler = (event: PointerEvent<HTMLLIElement>) => {
+    event.preventDefault();
+    pos.current.x = event.pageX;
+    pos.current.y = event.pageY;
+    selectThis();
+    toggle();
+  };
+
   const [title, body] = makeTitle(content);
 
   const isSelected = currentNote?.index === index;
   return (
-    <li
-      className={`p-6 w-full overflow-hidden cursor-pointer space-y-3 ${
-        isSelected ? "bg-blue-100" : ""
-      }`}
-      onClick={selectThis}
-    >
-      <h3 className="text-lg font-bold h-6">{title || "New Note"}</h3>
-      <p className="h-6">{body || "No additional text"}</p>
-      <time className="block text-xs text-gray-400">
-        {timeFormat(edittedAt)}
-      </time>
-    </li>
+    <>
+      <li
+        className={`p-6 w-full overflow-hidden cursor-pointer space-y-3 ${
+          isSelected ? "bg-blue-100" : ""
+        }`}
+        onClick={selectThis}
+        onContextMenu={contextHandler}
+      >
+        <h3 className="text-lg font-bold h-6">{title || "New Note"}</h3>
+        <p className="h-6">{body || "No additional text"}</p>
+        <time className="block text-xs text-gray-400">
+          {timeFormat(edittedAt)}
+        </time>
+      </li>
+      {isOn && (
+        <ContextMenu
+          x={pos.current.x}
+          y={pos.current.y}
+          index={index}
+          toggler={toggle}
+        />
+      )}
+    </>
   );
 }
 

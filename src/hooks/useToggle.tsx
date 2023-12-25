@@ -1,9 +1,9 @@
-import { MouseEvent, useState } from "react";
+import { FocusEvent, MouseEvent, useState } from "react";
 
 export default function useToggle(initialState: boolean) {
   const [isOn, setIsOn] = useState(initialState);
 
-  const toggle = (event?: MouseEvent) => {
+  const toggle = (event?: MouseEvent | FocusEvent) => {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
