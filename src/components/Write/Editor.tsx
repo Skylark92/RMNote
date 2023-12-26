@@ -29,6 +29,8 @@ const Editor = forwardRef(
     const editCurrent = async (content: string) => {
       if (!(app && update)) return;
       if (!(currentNotebook && currentNote)) return;
+      if (content === currentNote.note.content) return;
+
       const res = await editNote(
         currentNotebook.name,
         currentNote.index,
